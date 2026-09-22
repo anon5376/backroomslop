@@ -23,9 +23,10 @@ through the white door. Something in the corridors is learning you.
 Double-click `PLAY-BACKROOMS.command` — it installs the app to Desktop and launches it.
 If the normal app hangs on launch, use `PLAY-BACKROOMS-SAFE.command` (OpenGL renderer).
 
-Or run from source with Godot 4.6:
+Or run from source with Godot 4.6 (fetches CC0 assets first, ~27 MB):
 
 ```sh
+cd backrooms && python3 tools/fetch_assets.py && cd ..
 godot --path backrooms
 ```
 
