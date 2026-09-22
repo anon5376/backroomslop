@@ -1,0 +1,37 @@
+[
+  {
+    "seed": 0,
+    "exit": 1,
+    "evidence": [
+      "TRAVERSAL FAIL seed=0 leg=station_0 waypoint=9 edge=(24, 30)->(23, 30) position=(-20.6, 0.000839, -0.0) cell=(23, 30) target=(-21.0, 0.0, 0.0) remaining=0.400m reason=game left PLAYING during travel (state=3) contacts=[\"/root/Main/World/Static script=none point=(-20.55219, 0.0, -0.0) normal=(0.0, 1.0, 0.0)\", \"/root/Main/World/Static script=none point=(-20.55685, 0.0, -0.0) normal=(0.0, 1.0, 0.0)\", \"/root/Main/World/Static script=none point=(-20.6, 0.0, -0.0) normal=(0.0, 1.0, 0.0)\"]"
+    ]
+  },
+  {
+    "seed": 42,
+    "exit": 1,
+    "evidence": [
+      "TRAVERSAL FAIL seed=42 leg=station_0 waypoint=13 edge=(20, 30)->(19, 30) position=(-30.87999, 0.000839, 0.0) cell=(20, 30) target=(-33.0, 0.0, 0.0) remaining=2.120m reason=game left PLAYING during travel (state=3) contacts=[\"/root/Main/World/Static script=none point=(-30.83218, 0.0, 0.0) normal=(0.0, 1.0, 0.0)\", \"/root/Main/World/Static script=none point=(-30.83684, 0.0, 0.0) normal=(0.0, 1.0, 0.0)\", \"/root/Main/World/Static script=none point=(-30.87999, 0.0, 0.0) normal=(0.0, 1.0, 0.0)\"]"
+    ]
+  },
+  {
+    "seed": 999,
+    "exit": 1,
+    "evidence": [
+      "TRAVERSAL FAIL seed=999 leg=station_0 waypoint=13 edge=(20, 30)->(19, 30) position=(-32.47998, 0.000845, 0.0) cell=(19, 30) target=(-33.0, 0.0, 0.0) remaining=0.520m reason=game left PLAYING during travel (state=3) contacts=[\"/root/Main/World/Static script=none point=(-32.43217, 0.0, 0.0) normal=(0.0, 1.0, 0.0)\", \"/root/Main/World/Static script=none point=(-32.43654, 0.0, 0.0) normal=(0.0, 1.0, 0.0)\", \"/root/Main/World/Static script=none point=(-32.47998, 0.0, 0.0) normal=(0.0, 1.0, 0.0)\"]"
+    ]
+  },
+  {
+    "seed": 1234,
+    "exit": 1,
+    "evidence": [
+      "TRAVERSAL FAIL seed=1234 leg=station_0 waypoint=16 edge=(17, 30)->(16, 30) position=(-41.69304, 0.000845, 0.0) cell=(16, 30) target=(-42.0, 0.0, 0.0) remaining=0.307m reason=game left PLAYING during travel (state=3) contacts=[\"/root/Main/World/Static script=none point=(-41.64523, 0.0, 0.0) normal=(0.0, 1.0, 0.0)\", \"/root/Main/World/Static script=none point=(-41.6496, 0.0, 0.0) normal=(0.0, 1.0, 0.0)\", \"/root/Main/World/Static script=none point=(-41.69304, 0.0, 0.0) normal=(0.0, 1.0, 0.0)\"]"
+    ]
+  },
+  {
+    "seed": 424242,
+    "exit": 1,
+    "evidence": [
+      "TRAVERSAL FAIL seed=424242 leg=station_0 waypoint=19 edge=(17, 27)->(16, 27) position=(-39.05333, 0.000839, -9.0) cell=(17, 27) target=(-42.0, 0.0, -9.0) remaining=2.947m reason=game left PLAYING during travel (state=3) contacts=[\"/root/Main/World/Static script=none point=(-39.00552, 0.0, -9.0) normal=(0.0, 1.0, 0.0)\", \"/root/Main/World/Static script=none point=(-39.01017, 0.0, -9.0) normal=(0.0, 1.0, 0.0)\", \"/root/Main/World/Static script=none point=(-39.05333, 0.0, -9.0) normal=(0.0, 1.0, 0.0)\"]"
+    ]
+  }
+]

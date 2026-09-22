@@ -1,0 +1,174 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Started Project initialization (5 steps)[39m[0m
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Scanning file structure...[39m[0m
+[  16% ] [90m[1mfirst_scan_filesystem[22m | Loading global class names...[39m[0m
+[  33% ] [90m[1mfirst_scan_filesystem[22m | Verifying GDExtensions...[39m[0m
+[  50% ] [90m[1mfirst_scan_filesystem[22m | Creating autoload scripts...[39m[0m
+[  66% ] [90m[1mfirst_scan_filesystem[22m | Initializing plugins...[39m[0m
+[  83% ] [90m[1mfirst_scan_filesystem[22m | Starting file scan...[39m[0m
+[92m[ DONE ][39m [1mfirst_scan_filesystem[22m
+[0m
+[   0% ] [90m[1mexport[22m | Started Exporting for macOS (3 steps)[39m[0m
+[   0% ] [90m[1mexport[22m | Creating app bundle[39m[0m
+[  25% ] [90m[1mexport[22m | Making PKG[39m[0m
+[   0% ] [90m[1msavepack[22m | Started Packing (102 steps)[39m[0m
+[   1% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/creak.wav-e93fe0cc1d6153bd4c5ded77439c32f9.sample[39m[0m
+[   1% ] [90m[1msavepack[22m | Storing File: res://assets/audio/creak.wav.import[39m[0m
+[   2% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/drag.wav-c038291f42b5a1c95e0af52ea030587d.sample[39m[0m
+[   2% ] [90m[1msavepack[22m | Storing File: res://assets/audio/drag.wav.import[39m[0m
+[   3% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/drone_loop.wav-ce1fdcde50b2e4987d9c0f3009d59c91.sample[39m[0m
+[   3% ] [90m[1msavepack[22m | Storing File: res://assets/audio/drone_loop.wav.import[39m[0m
+[   4% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/gulp.wav-246311795bc9091d8e872d8d27e5cd71.sample[39m[0m
+[   4% ] [90m[1msavepack[22m | Storing File: res://assets/audio/gulp.wav.import[39m[0m
+[   6% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/hum_loop.wav-eabca3d5a18fcd316d5957b9b66f5fae.sample[39m[0m
+[   6% ] [90m[1msavepack[22m | Storing File: res://assets/audio/hum_loop.wav.import[39m[0m
+[   7% ] [90m[1msavepack[22m | Storing File: res://assets/audio/manifest.json[39m[0m
+[   8% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/screech.wav-cafd290bbf153ae6a4362dc51cf697c9.sample[39m[0m
+[   8% ] [90m[1msavepack[22m | Storing File: res://assets/audio/screech.wav.import[39m[0m
+[  10% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/step_0.wav-44113591e2075e238e6129f2a1ec6bce.sample[39m[0m
+[  10% ] [90m[1msavepack[22m | Storing File: res://assets/audio/step_0.wav.import[39m[0m
+[  11% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/step_1.wav-7ec443649fa4497f89790a09140af2e3.sample[39m[0m
+[  11% ] [90m[1msavepack[22m | Storing File: res://assets/audio/step_1.wav.import[39m[0m
+[  12% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/step_2.wav-de264c747b480e96351d3db7a35a9809.sample[39m[0m
+[  12% ] [90m[1msavepack[22m | Storing File: res://assets/audio/step_2.wav.import[39m[0m
+[  13% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/step_3.wav-7bf47ff4b0664941f3a7f15f49618eaa.sample[39m[0m
+[  13% ] [90m[1msavepack[22m | Storing File: res://assets/audio/step_3.wav.import[39m[0m
+[  15% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/step_4.wav-3a5c25021ea967efa92006db05ff391a.sample[39m[0m
+[  15% ] [90m[1msavepack[22m | Storing File: res://assets/audio/step_4.wav.import[39m[0m
+[  16% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/step_5.wav-7c0d66b364a1625593e77a1bfc6b07be.sample[39m[0m
+[  16% ] [90m[1msavepack[22m | Storing File: res://assets/audio/step_5.wav.import[39m[0m
+[  17% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/thunk.wav-3a009424e6499254b48c2aaae0c48691.sample[39m[0m
+[  17% ] [90m[1msavepack[22m | Storing File: res://assets/audio/thunk.wav.import[39m[0m
+[  19% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/carpet_albedo.png-66594ce69ab9e2d53d86ff5e2c46a55d.ctex[39m[0m
+[  19% ] [90m[1msavepack[22m | Storing File: res://assets/materials/carpet_albedo.png.import[39m[0m
+[  20% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/carpet_normal.png-b212c29e281e34ea5a161a1674f0b0d8.ctex[39m[0m
+[  20% ] [90m[1msavepack[22m | Storing File: res://assets/materials/carpet_normal.png.import[39m[0m
+[  21% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/carpet_roughness.png-8581fa92faef18fd24c70579553eb016.ctex[39m[0m
+[  21% ] [90m[1msavepack[22m | Storing File: res://assets/materials/carpet_roughness.png.import[39m[0m
+[  23% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/ceiling_albedo.png-d8838a7f9b729b224b11871c0317f947.ctex[39m[0m
+[  23% ] [90m[1msavepack[22m | Storing File: res://assets/materials/ceiling_albedo.png.import[39m[0m
+[  24% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/ceiling_normal.png-b777fc1eb3064ba04ff4ebcde4d07077.ctex[39m[0m
+[  24% ] [90m[1msavepack[22m | Storing File: res://assets/materials/ceiling_normal.png.import[39m[0m
+[  25% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/ceiling_roughness.png-435da653ea728d7ff382a8968074d8ce.ctex[39m[0m
+[  25% ] [90m[1msavepack[22m | Storing File: res://assets/materials/ceiling_roughness.png.import[39m[0m
+[  26% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/concrete_albedo.png-15a1127288a7a508fb3045a5b3ec6b0e.ctex[39m[0m
+[  26% ] [90m[1msavepack[22m | Storing File: res://assets/materials/concrete_albedo.png.import[39m[0m
+[  28% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/concrete_normal.png-2f21227745893f0bf57e261e33db21d9.ctex[39m[0m
+[  28% ] [90m[1msavepack[22m | Storing File: res://assets/materials/concrete_normal.png.import[39m[0m
+[  29% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/concrete_roughness.png-ee567dede458bb1bed42e99b449b65aa.ctex[39m[0m
+[  29% ] [90m[1msavepack[22m | Storing File: res://assets/materials/concrete_roughness.png.import[39m[0m
+[  30% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/floor_server_albedo.png-979b9843fd1fb59271498ca81ce38d06.ctex[39m[0m
+[  30% ] [90m[1msavepack[22m | Storing File: res://assets/materials/floor_server_albedo.png.import[39m[0m
+[  32% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/floor_server_normal.png-b696bc244fee837035a6022846c9910a.ctex[39m[0m
+[  32% ] [90m[1msavepack[22m | Storing File: res://assets/materials/floor_server_normal.png.import[39m[0m
+[  33% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/floor_server_roughness.png-0715f2308f57ea233980f12256dec5b9.ctex[39m[0m
+[  33% ] [90m[1msavepack[22m | Storing File: res://assets/materials/floor_server_roughness.png.import[39m[0m
+[  33% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/server_albedo.png-b2abf4e7989bc45bda4051f01f5f3b29.ctex[39m[0m
+[  33% ] [90m[1msavepack[22m | Storing File: res://assets/materials/server_albedo.png.import[39m[0m
+[  35% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/server_normal.png-b8a9f1d947c902bba1235917ddbbd5eb.ctex[39m[0m
+[  35% ] [90m[1msavepack[22m | Storing File: res://assets/materials/server_normal.png.import[39m[0m
+[  36% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/server_roughness.png-4f238be764f73560c230faa4d30febd5.ctex[39m[0m
+[  36% ] [90m[1msavepack[22m | Storing File: res://assets/materials/server_roughness.png.import[39m[0m
+[  37% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/wall_albedo.png-bd2b5a917b4fcfa93f4abb7de70b93e9.ctex[39m[0m
+[  37% ] [90m[1msavepack[22m | Storing File: res://assets/materials/wall_albedo.png.import[39m[0m
+[  38% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/wall_b_albedo.png-55893842aa35447ad9a34818217fd67a.ctex[39m[0m
+[  38% ] [90m[1msavepack[22m | Storing File: res://assets/materials/wall_b_albedo.png.import[39m[0m
+[  40% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/wall_b_normal.png-e3b42c60f98c4e7ad9f671e78b4ad6ac.ctex[39m[0m
+[  40% ] [90m[1msavepack[22m | Storing File: res://assets/materials/wall_b_normal.png.import[39m[0m
+[  41% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/wall_b_roughness.png-cb7822273aa8c6b56817097ea713a1dc.ctex[39m[0m
+[  41% ] [90m[1msavepack[22m | Storing File: res://assets/materials/wall_b_roughness.png.import[39m[0m
+[  42% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/wall_normal.png-4f84b7e6b7deb94ce30696f3b6f45a57.ctex[39m[0m
+[  42% ] [90m[1msavepack[22m | Storing File: res://assets/materials/wall_normal.png.import[39m[0m
+[  44% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/wall_roughness.png-ddb800d2b24ce73d5449ca205d320bbf.ctex[39m[0m
+[  44% ] [90m[1msavepack[22m | Storing File: res://assets/materials/wall_roughness.png.import[39m[0m
+[  45% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/tex_ceiling.jpg-d50f81e9d9f01ce286c52a1b684d7656.ctex[39m[0m
+[  45% ] [90m[1msavepack[22m | Storing File: res://assets/tex_ceiling.jpg.import[39m[0m
+[  46% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/tex_floor.jpg-670b7fbf96f0c903a1ebbb05fe483941.ctex[39m[0m
+[  46% ] [90m[1msavepack[22m | Storing File: res://assets/tex_floor.jpg.import[39m[0m
+[  48% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/tex_wall.jpg-7f5fd8e648581e5268aa013d79659e0c.ctex[39m[0m
+[  48% ] [90m[1msavepack[22m | Storing File: res://assets/tex_wall.jpg.import[39m[0m
+[  49% ] [90m[1msavepack[22m | Storing File: res://.godot/exported/133200997/export-1c8b76438c3b599943265dd4117ded58-entity.scn[39m[0m
+[  50% ] [90m[1msavepack[22m | Storing File: res://.godot/exported/133200997/export-3ad5c15c4f3250da0cc7c1af1770d85f-main.scn[39m[0m
+[  51% ] [90m[1msavepack[22m | Storing File: res://.godot/exported/133200997/export-234fb6894ec6226e856ab7f825500d3d-player.scn[39m[0m
+[  53% ] [90m[1msavepack[22m | Storing File: res://scripts/audio_manager.gdc[39m[0m
+[  54% ] [90m[1msavepack[22m | Storing File: res://scripts/campaign.gdc[39m[0m
+[  55% ] [90m[1msavepack[22m | Storing File: res://scripts/campaign_interactable.gdc[39m[0m
+[  57% ] [90m[1msavepack[22m | Storing File: res://scripts/entity.gdc[39m[0m
+[  58% ] [90m[1msavepack[22m | Storing File: res://scripts/entity_visual.gdc[39m[0m
+[  59% ] [90m[1msavepack[22m | Storing File: res://scripts/fake_door.gdc[39m[0m
+[  61% ] [90m[1msavepack[22m | Storing File: res://scripts/game_manager.gdc[39m[0m
+[  62% ] [90m[1msavepack[22m | Storing File: res://scripts/grid_astar.gdc[39m[0m
+[  63% ] [90m[1msavepack[22m | Storing File: res://scripts/light_manager.gdc[39m[0m
+[  64% ] [90m[1msavepack[22m | Storing File: res://scripts/main.gdc[39m[0m
+[  66% ] [90m[1msavepack[22m | Storing File: res://scripts/maze_generator.gdc[39m[0m
+[  66% ] [90m[1msavepack[22m | Storing File: res://scripts/net_manager.gdc[39m[0m
+[  67% ] [90m[1msavepack[22m | Storing File: res://scripts/pickup.gdc[39m[0m
+[  69% ] [90m[1msavepack[22m | Storing File: res://scripts/player.gdc[39m[0m
+[  70% ] [90m[1msavepack[22m | Storing File: res://scripts/prop_factory.gdc[39m[0m
+[  71% ] [90m[1msavepack[22m | Storing File: res://scripts/scare_director.gdc[39m[0m
+[  73% ] [90m[1msavepack[22m | Storing File: res://scripts/texture_factory.gdc[39m[0m
+[  74% ] [90m[1msavepack[22m | Storing File: res://scripts/ui_manager.gdc[39m[0m
+[  75% ] [90m[1msavepack[22m | Storing File: res://shaders/entity_static.gdshader[39m[0m
+[  76% ] [90m[1msavepack[22m | Storing File: res://shaders/light_cone.gdshader[39m[0m
+[  78% ] [90m[1msavepack[22m | Storing File: res://shaders/light_panel.gdshader[39m[0m
+[  79% ] [90m[1msavepack[22m | Storing File: res://shaders/vhs_overlay.gdshader[39m[0m
+[  80% ] [90m[1msavepack[22m | Storing File: res://tools/campaign_test.gdc[39m[0m
+[  82% ] [90m[1msavepack[22m | Storing File: res://tools/controller_probe.gdc[39m[0m
+[  83% ] [90m[1msavepack[22m | Storing File: res://tools/entity_visual_checks.gdc[39m[0m
+[  84% ] [90m[1msavepack[22m | Storing File: res://tools/entity_visual_test.gdc[39m[0m
+[  86% ] [90m[1msavepack[22m | Storing File: res://tools/generation_test.gdc[39m[0m
+[  87% ] [90m[1msavepack[22m | Storing File: res://tools/interaction_restart_test.gdc[39m[0m
+[  88% ] [90m[1msavepack[22m | Storing File: res://tools/lifecycle_test.gdc[39m[0m
+[  89% ] [90m[1msavepack[22m | Storing File: res://tools/material_test.gdc[39m[0m
+[  91% ] [90m[1msavepack[22m | Storing File: res://tools/prop_audio_test.gdc[39m[0m
+[  92% ] [90m[1msavepack[22m | Storing File: res://tools/render_review.gdc[39m[0m
+[  93% ] [90m[1msavepack[22m | Storing File: res://tools/restart_test.gdc[39m[0m
+[  95% ] [90m[1msavepack[22m | Storing File: res://tools/selftest.gdc[39m[0m
+[  96% ] [90m[1msavepack[22m | Storing File: res://tools/traversal_test.gdc[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://icon.svg.import[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://scenes/entity.tscn.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://scenes/main.tscn.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://scenes/player.tscn.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://scripts/audio_manager.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://scripts/campaign.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://scripts/campaign_interactable.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://scripts/entity.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://scripts/entity_visual.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://scripts/fake_door.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://scripts/game_manager.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://scripts/grid_astar.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://scripts/light_manager.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://scripts/main.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://scripts/maze_generator.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://scripts/net_manager.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://scripts/pickup.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://scripts/player.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://scripts/prop_factory.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://scripts/scare_director.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://scripts/texture_factory.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://scripts/ui_manager.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://tools/campaign_test.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://tools/controller_probe.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://tools/entity_visual_checks.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://tools/entity_visual_test.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://tools/generation_test.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://tools/interaction_restart_test.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://tools/lifecycle_test.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://tools/material_test.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://tools/prop_audio_test.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://tools/render_review.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://tools/restart_test.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://tools/selftest.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://tools/traversal_test.gd.remap[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://.godot/global_script_class_cache.cfg[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://icon.svg[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://.godot/uid_cache.bin[39m[0m
+[  97% ] [90m[1msavepack[22m | Storing File: res://project.binary[39m[0m
+[92m[ DONE ][39m [1msavepack[22m
+[0m
+[  50% ] [90m[1mexport[22m | Code signing bundle[39m[0m
+[  75% ] [90m[1mexport[22m | Making ZIP[39m[0m
+[92m[ DONE ][39m [1mexport[22m
+[0m

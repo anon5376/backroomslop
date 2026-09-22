@@ -1,0 +1,15 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+AudioManager: using res://assets/audio/hum_loop.wav
+AudioManager: using res://assets/audio/drone_loop.wav
+AudioManager: using res://assets/audio/screech.wav
+AudioManager: using res://assets/audio/thunk.wav
+AudioManager: using res://assets/audio/creak.wav
+AudioManager: using res://assets/audio/gulp.wav
+AudioManager: using res://assets/audio/drag.wav
+AudioManager: using res://assets/audio/step_0.wav
+AudioManager: using res://assets/audio/step_1.wav
+AudioManager: using res://assets/audio/step_2.wav
+AudioManager: using res://assets/audio/step_3.wav
+AudioManager: using res://assets/audio/step_4.wav
+AudioManager: using res://assets/audio/step_5.wav

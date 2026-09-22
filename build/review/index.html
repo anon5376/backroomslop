@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BACKROOMS — Screenshot Review</title>
+<style>
+  :root { --amber: #efc782; --bg: #141310; --panel: #1e1c16; --ink: #d8d2bd; --dim: #8f8a76; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 15px/1.55 -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+  header { padding: 28px 24px 8px; max-width: 1200px; margin: 0 auto; }
+  h1 { color: var(--amber); font-size: 22px; letter-spacing: 2px; margin: 0 0 4px; }
+  header p { color: var(--dim); margin: 0 0 12px; }
+  main { max-width: 1200px; margin: 0 auto; padding: 0 24px 60px; }
+  h2 { color: var(--amber); font-size: 15px; letter-spacing: 2px; margin: 34px 0 12px;
+       border-bottom: 1px solid #333026; padding-bottom: 6px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 18px; }
+  figure { margin: 0; background: var(--panel); border: 1px solid #333026; border-radius: 6px; overflow: hidden; }
+  figure img { display: block; width: 100%; aspect-ratio: 16/9; object-fit: cover; background: #000; }
+  figure.small img { aspect-ratio: auto; }
+  figcaption { padding: 10px 12px; }
+  figcaption b { color: var(--amber); font-weight: 600; }
+  figcaption span { color: var(--dim); font-size: 13px; display: block; }
+  table { border-collapse: collapse; width: 100%; background: var(--panel);
+          border: 1px solid #333026; border-radius: 6px; overflow: hidden; }
+  td, th { padding: 7px 12px; text-align: left; border-bottom: 1px solid #2a2820; font-size: 14px; }
+  tr:last-child td { border-bottom: 0; }
+  th { color: var(--amber); font-weight: 600; font-size: 13px; letter-spacing: 1px; }
+  kbd { background: #000; border: 1px solid #4a4636; border-radius: 4px; padding: 1px 7px;
+        font: 12px/1.6 monospace; color: var(--amber); white-space: nowrap; }
+  ul.zones { list-style: none; padding: 0; display: grid;
+             grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+  ul.zones li { background: var(--panel); border: 1px solid #333026; border-radius: 6px; padding: 10px 12px; }
+  ul.zones b { color: var(--amber); }
+  ul.zones span { color: var(--dim); font-size: 13px; display: block; }
+  /* Click-to-zoom lightbox, no JS. */
+  .shot { display: block; }
+  .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.92);
+              z-index: 10; text-align: center; padding: 3vh 3vw; }
+  .lightbox:target { display: block; }
+  .lightbox img { max-width: 100%; max-height: 94vh; border: 1px solid #4a4636; }
+</style>
+</head>
+<body>
+<header>
+  <h1>BACKROOMS — SCREENSHOT REVIEW</h1>
+  <p>Captured from the live build (seed 1234). Click any shot to zoom. Regenerate with<br>
+  <kbd>godot --path backrooms --script res://tools/render_review.gd</kbd></p>
+</header>
+<main>
+  <h2>LEVELS — THREE FLOORS, ONE WAY DOWN</h2>
+  <p style="color:var(--dim)">The campaign runs <b style="color:var(--amber)">Level 0 → 1 → 2</b>, one station per floor, stairwells east. There is no way back up. The white-door exit is on the bottom floor only:</p>
+  <ul class="zones">
+    <li><b>Level 0 · The Lobby</b><span>Yellow halls. Station 01 in the west offices; stairs past the server hall.</span></li>
+    <li><b>Level 1 · Concrete Halls</b><span>Bare concrete, damp air. Station 02 in the north hall; stairs east.</span></li>
+    <li><b>Level 2 · Pipe Dreams</b><span>Cold machine rooms laced with pipe runs. Station 03 north, white door east.</span></li>
+  </ul>
+
+  <h2>LEVEL 0 — EIGHT ZONES</h2>
+  <ul class="zones">
+    <li><b>Lobby</b><span>Spawn. Pillars, reception desk, briefing station 04.</span></li>
+    <li><b>West offices</b><span>Yellow cubicle maze. Station 01 reel-to-reel.</span></li>
+    <li><b>Service tunnels</b><span>Concrete + pipes off the north maze.</span></li>
+    <li><b>Server farm</b><span>Cool blue racks in the east maze.</span></li>
+    <li><b>Dark pocket</b><span>Near-black maze. Flash and glowsticks earn their keep.</span></li>
+    <li><b>Stairwell</b><span>East stairs down to Level 1. One way.</span></li>
+    <li><b>Break room</b><span>Table, office chairs, cooler. Procedural set.</span></li>
+    <li><b>Archive</b><span>Shelf wall + crates off the service row.</span></li>
+  </ul>
+
+  <h2>FULL MAPS — ALL 3 LEVELS (SEED 1234)</h2>
+  <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">
+    <figure><a class="shot" href="#lb-map0"><img src="map_level0.png" alt="Level 0 map" style="aspect-ratio:auto"></a><figcaption><b>Level 0 · The Lobby</b><span>Spawn green, stairs orange, stations amber, scraps cyan.</span></figcaption></figure>
+    <figure><a class="shot" href="#lb-map1"><img src="map_level1.png" alt="Level 1 map" style="aspect-ratio:auto"></a><figcaption><b>Level 1 · Concrete Halls</b><span>Entry center, station 02 north, stairs east.</span></figcaption></figure>
+    <figure><a class="shot" href="#lb-map2"><img src="map_level2.png" alt="Level 2 map" style="aspect-ratio:auto"></a><figcaption><b>Level 2 · Pipe Dreams</b><span>Entry center, station 03 north, white door east.</span></figcaption></figure>
+  </div>
+  <div style="display:flex;gap:18px;flex-wrap:wrap;margin-top:12px">
+    <table style="flex:1 1 220px">
+      <tr><th colspan="2">Zones</th></tr>
+      <tr><td style="width:22px"><span style="display:inline-block;width:14px;height:14px;background:#b7a349"></span></td><td>Lobby (L0)</td></tr>
+      <tr><td><span style="display:inline-block;width:14px;height:14px;background:#8c843f"></span></td><td>West offices (L0)</td></tr>
+      <tr><td><span style="display:inline-block;width:14px;height:14px;background:#596b5b"></span></td><td>Service / concrete (L0+L1)</td></tr>
+      <tr><td><span style="display:inline-block;width:14px;height:14px;background:#4c6b8c"></span></td><td>Server farm (L0)</td></tr>
+      <tr><td><span style="display:inline-block;width:14px;height:14px;background:#282119;border:1px solid #4a4636"></span></td><td>Dark pocket (L0)</td></tr>
+      <tr><td><span style="display:inline-block;width:14px;height:14px;background:#405273"></span></td><td>Machine rooms (L2)</td></tr>
+    </table>
+    <table style="flex:1 1 220px">
+      <tr><th colspan="2">Markers</th></tr>
+      <tr><td style="width:22px"><span style="display:inline-block;width:14px;height:14px;background:#33ff4d"></span></td><td>Spawn</td></tr>
+      <tr><td><span style="display:inline-block;width:14px;height:14px;background:#ffffff"></span></td><td>Exit door (L2)</td></tr>
+      <tr><td><span style="display:inline-block;width:14px;height:14px;background:#ff591a"></span></td><td>Stairs down (L0+L1)</td></tr>
+      <tr><td><span style="display:inline-block;width:14px;height:14px;background:#ff9e1a"></span></td><td>Signal stations (01 L0 · 02 L1 · 03 L2 + briefing)</td></tr>
+      <tr><td><span style="display:inline-block;width:14px;height:14px;background:#4dffff"></span></td><td>Lore scraps, 6 (L0)</td></tr>
+    </table>
+  </div>
+
+  <h2>CONTROLS</h2>
+  <table>
+    <tr><th>Key</th><th>Action</th></tr>
+    <tr><td><kbd>W A S D</kbd> / arrows</td><td>Move (mouse looks)</td></tr>
+    <tr><td><kbd>Shift</kbd></td><td>Sprint — fast but loud, drains stamina</td></tr>
+    <tr><td><kbd>Ctrl</kbd> / <kbd>C</kbd></td><td>Crouch (toggle) — quiet, harder to spot</td></tr>
+    <tr><td><kbd>F</kbd></td><td>Flash pulse to see in the dark</td></tr>
+    <tr><td><kbd>E</kbd></td><td>Use: grab, read, approve station, exit / drink with pack open</td></tr>
+    <tr><td><kbd>Q</kbd></td><td>Eat bread (hunger)</td></tr>
+    <tr><td><kbd>R</kbd></td><td>Supply pack / inventory (restart on end screens)</td></tr>
+    <tr><td><kbd>G</kbd></td><td>Drop glowstick path marker (3 per run)</td></tr>
+    <tr><td><kbd>J</kbd></td><td>Field journal (briefing + records + margin notes)</td></tr>
+    <tr><td><kbd>V</kbd></td><td>Camera: 1st / 3rd / front view</td></tr>
+    <tr><td><kbd>Esc</kbd> / <kbd>P</kbd></td><td>Pause (sensitivity, FOV, preset, VHS)</td></tr>
+  </table>
+
+  <h2>LEVEL 0 — ZONES</h2>
+  <div class="grid">
+    <figure><a class="shot" href="#lb-lobby"><img src="lobby.png" alt="Lobby"></a><figcaption><b>Lobby</b><span>Spawn view. Rail-frame troffers, pillar trim, station 04 desk.</span></figcaption></figure>
+    <figure><a class="shot" href="#lb-west"><img src="west.png" alt="West offices"></a><figcaption><b>West offices</b><span>Station 01 recorder, damask wallpaper, amber way-plates.</span></figcaption></figure>
+    <figure><a class="shot" href="#lb-service"><img src="service.png" alt="Service tunnels"></a><figcaption><b>Service</b><span>Concrete corridors, pipe runs, sickly green light.</span></figcaption></figure>
+    <figure><a class="shot" href="#lb-server"><img src="server.png" alt="Server farm"></a><figcaption><b>Server farm</b><span>Racks with LED strips, cable trays, cooler, crates.</span></figcaption></figure>
+    <figure><a class="shot" href="#lb-dark"><img src="dark.png" alt="Dark pocket"></a><figcaption><b>Dark pocket</b><span>One live panel, hanging rods, dead slabs. Bring a flash.</span></figcaption></figure>
+    <figure><a class="shot" href="#lb-breakroom"><img src="breakroom.png" alt="Break room"></a><figcaption><b>Break room</b><span>Table + office chairs, tray and mug leftovers.</span></figcaption></figure>
+    <figure><a class="shot" href="#lb-stairs"><img src="stairs.png" alt="Stairwell down"></a><figcaption><b>Stairwell down</b><span>Railed pit past the server hall. One way. Red lamp, DOWN sign.</span></figcaption></figure>
+  </div>
+
+  <h2>LEVEL 1 — CONCRETE HALLS</h2>
+  <div class="grid">
+    <figure><a class="shot" href="#lb-l1hall"><img src="level1_hall.png" alt="Entry hall"></a><figcaption><b>Entry hall</b><span>Pillar forest, bare concrete, damp haze.</span></figcaption></figure>
+    <figure><a class="shot" href="#lb-l1north"><img src="level1_north.png" alt="North hall station"></a><figcaption><b>North hall</b><span>Station 02 console under steady panels.</span></figcaption></figure>
+  </div>
+
+  <h2>LEVEL 2 — PIPE DREAMS</h2>
+  <div class="grid">
+    <figure><a class="shot" href="#lb-l2spokes"><img src="level2_spokes.png" alt="Center hall"></a><figcaption><b>Center hall</b><span>Cold blue machine rooms, locker rows, damp haze.</span></figcaption></figure>
+    <figure><a class="shot" href="#lb-l2exit"><img src="level2_exit.png" alt="Exit door"></a><figcaption><b>East hall exit</b><span>The white door + return-channel plate. Locked until 03.</span></figcaption></figure>
+  </div>
+
+  <h2>THE MAZE BETWEEN — SAME LANDMARKS, NEW NIGHTMARE</h2>
+  <div class="grid">
+    <figure><a class="shot" href="#lb-maze0"><img src="maze0.png" alt="Level 0 maze"></a><figcaption><b>Level 0 maze</b><span>Wallpaper baffles + partition drift between the wings.</span></figcaption></figure>
+    <figure><a class="shot" href="#lb-maze1"><img src="maze1.png" alt="Level 1 maze"></a><figcaption><b>Level 1 maze</b><span>Concrete hall grid broken by pillar clusters.</span></figcaption></figure>
+    <figure><a class="shot" href="#lb-maze2"><img src="maze2.png" alt="Level 2 maze"></a><figcaption><b>Level 2 maze</b><span>Machine maze under the pipe-run backbones.</span></figcaption></figure>
+  </div>
+
+  <h2>PROCEDURAL FURNITURE — IN GAME</h2>
+  <div class="grid">
+    <figure><a class="shot" href="#lb-table"><img src="furn_table.png" alt="Table close-up"></a><figcaption><b>Table</b><span>Break room. Tray + mug staged on top.</span></figcaption></figure>
+    <figure><a class="shot" href="#lb-chair"><img src="furn_chair.png" alt="Chair close-up"></a><figcaption><b>Chair</b><span>5-star base, gas lift, armrests, slatted back.</span></figcaption></figure>
+    <figure><a class="shot" href="#lb-cabinet"><img src="furn_cabinet.png" alt="Cabinet close-up"></a><figcaption><b>Cabinet</b><span>Tall filing cabinet with drawers + label holders.</span></figcaption></figure>
+  </div>
+
+  <div class="lightbox" id="lb-map0"><a href="#"><img src="map_level0.png" alt=""></a></div>
+  <div class="lightbox" id="lb-map1"><a href="#"><img src="map_level1.png" alt=""></a></div>
+  <div class="lightbox" id="lb-map2"><a href="#"><img src="map_level2.png" alt=""></a></div>
+  <div class="lightbox" id="lb-stairs"><a href="#"><img src="stairs.png" alt=""></a></div>
+  <div class="lightbox" id="lb-l1hall"><a href="#"><img src="level1_hall.png" alt=""></a></div>
+  <div class="lightbox" id="lb-l1north"><a href="#"><img src="level1_north.png" alt=""></a></div>
+  <div class="lightbox" id="lb-l2spokes"><a href="#"><img src="level2_spokes.png" alt=""></a></div>
+  <div class="lightbox" id="lb-l2exit"><a href="#"><img src="level2_exit.png" alt=""></a></div>
+  <div class="lightbox" id="lb-maze0"><a href="#"><img src="maze0.png" alt=""></a></div>
+  <div class="lightbox" id="lb-maze1"><a href="#"><img src="maze1.png" alt=""></a></div>
+  <div class="lightbox" id="lb-maze2"><a href="#"><img src="maze2.png" alt=""></a></div>
+  <div class="lightbox" id="lb-lobby"><a href="#"><img src="lobby.png" alt=""></a></div>
+  <div class="lightbox" id="lb-west"><a href="#"><img src="west.png" alt=""></a></div>
+  <div class="lightbox" id="lb-service"><a href="#"><img src="service.png" alt=""></a></div>
+  <div class="lightbox" id="lb-server"><a href="#"><img src="server.png" alt=""></a></div>
+  <div class="lightbox" id="lb-dark"><a href="#"><img src="dark.png" alt=""></a></div>
+  <div class="lightbox" id="lb-breakroom"><a href="#"><img src="breakroom.png" alt=""></a></div>
+  <div class="lightbox" id="lb-table"><a href="#"><img src="furn_table.png" alt=""></a></div>
+  <div class="lightbox" id="lb-chair"><a href="#"><img src="furn_chair.png" alt=""></a></div>
+  <div class="lightbox" id="lb-cabinet"><a href="#"><img src="furn_cabinet.png" alt=""></a></div>
+</main>
+</body>
+</html>

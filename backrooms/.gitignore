@@ -1,0 +1,14 @@
+# Godot 4 generated files
+.godot/
+build/
+
+# Fetched CC0 assets (regenerate with: python3 tools/fetch_assets.py)
+assets/*
+!assets/.gdkeep
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# Editor backups
+*.tmp

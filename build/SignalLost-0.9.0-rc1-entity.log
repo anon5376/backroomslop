@@ -1,0 +1,21 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+ENTITY VISUAL PASS original collider retained
+ENTITY VISUAL PASS open ribs and three articulated segments per finger
+ENTITY VISUAL PASS complete articulated rig
+ENTITY VISUAL PASS profiled anatomy replaces primitive meshes
+ENTITY VISUAL PASS surface normals are finite and outward
+ENTITY VISUAL PASS stationary stalk feet stay planted
+ENTITY VISUAL PASS breathing articulates ribs
+ENTITY VISUAL PASS head anticipates target without steering body
+ENTITY VISUAL PASS presentation does not mutate AI or heading
+ENTITY VISUAL PASS distance-driven hunt alternates contacts with world-space stance
+ENTITY VISUAL PASS two-bone IK retains segment lengths throughout hunt
+ENTITY VISUAL PASS hunt opens jaw and blends aggressive pose
+ENTITY VISUAL PASS hunt lift differs from low stalking step
+ENTITY VISUAL PASS teleport resets anchors without stretched limbs
+ENTITY VISUAL PASS 15 Hz network displacement animates zero-velocity replica
+ENTITY VISUAL PASS inactive replica preserves lifecycle freeze
+ENTITY VISUAL PASS active replica animates without running AI
+ENTITY VISUAL PASS entity and procedural rig dispose cleanly
+ENTITY VISUAL RESULT 0 failures
