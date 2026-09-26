@@ -1,7 +1,8 @@
 class_name Player
 extends CharacterBody3D
-## FPS controller: walk/sprint/crouch, stamina, headbob, flash, interact.
+## FPS controller: walk/sprint/crouch, stamina, headbob, flashlight, interact.
 ## Loudness is gameplay: sprint 18m, walk 7m, crouch 3m noise radii.
+## Flashlight is a plain light source: it never stuns, blinds, or repels the entity.
 
 const WALK_SPEED: float = 3.2
 const SPRINT_SPEED: float = 5.6
@@ -11,9 +12,9 @@ const NOISE_WALK: float = 7.0
 const NOISE_CROUCH: float = 3.0
 const STEP_DIST_WALK: float = 2.2
 const STEP_DIST_SPRINT: float = 2.7
-const FLASH_RANGE: float = 10.0
-const FLASH_TIME: float = 0.4
-const FLASH_COOLDOWN: float = 2.0
+const FLASH_RANGE: float = 18.0
+const FLASH_BATTERY_DRAIN: float = 1.0 / 480.0  # ~8 min of light per full charge
+const FLASH_BATTERY_RECHARGE: float = 1.0 / 60.0  # ~1 min off to refill
 
 var active: bool = false
 var remote: bool = false  # puppet replica of the partner (no input/sim/cam)
@@ -30,8 +31,8 @@ var _remote_yaw: float = 0.0
 var _pitch: float = 0.0
 var _bob_phase: float = 0.0
 var _step_accum: float = 0.0
-var _flash_t: float = 0.0
-var _flash_cd: float = 0.0
+var flashlight_on: bool = false
+var flash_battery: float = 1.0
 var _stand_h: float = 1.8
 var _crouch_h: float = 1.15
 var _head_stand_y: float = 1.62
@@ -183,16 +184,17 @@ func _physics_process(delta: float) -> void:
 	camera.fov = lerpf(camera.fov, want_fov, fov_k)
 	_cam3.fov = lerpf(_cam3.fov, want_fov, fov_k)
 	_camf.fov = lerpf(_camf.fov, want_fov, fov_k)
-	# Flash.
-	_flash_cd = maxf(0.0, _flash_cd - delta)
-	if Input.is_action_just_pressed("flash") and _flash_cd <= 0.0:
-		_flash_t = FLASH_TIME
-		_flash_cd = FLASH_COOLDOWN
-		flash_light.visible = true
-	if _flash_t > 0.0:
-		_flash_t -= delta
-		if _flash_t <= 0.0:
-			flash_light.visible = false
+	# Flashlight: F toggles a plain light. Battery drains slowly while on,
+	# recharges while off. It has no effect on the entity.
+	if Input.is_action_just_pressed("flash") and flash_battery > 0.0:
+		flashlight_on = not flashlight_on
+	if flashlight_on:
+		flash_battery = maxf(0.0, flash_battery - FLASH_BATTERY_DRAIN * delta)
+		if flash_battery <= 0.0:
+			flashlight_on = false
+	else:
+		flash_battery = minf(1.0, flash_battery + FLASH_BATTERY_RECHARGE * delta)
+	flash_light.visible = flashlight_on
 	# Interact. With the pack open, E drinks and Q eats instead.
 	if Input.is_action_just_pressed("interact"):
 		if game != null and game.has_method("is_inventory_open") and bool(game.call("is_inventory_open")):
@@ -238,7 +240,7 @@ func current_noise_radius() -> float:
 
 
 func flash_ready_frac() -> float:
-	return 1.0 - _flash_cd / FLASH_COOLDOWN
+	return flash_battery
 
 
 func interaction_hit() -> Dictionary:

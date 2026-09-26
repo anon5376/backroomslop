@@ -46,7 +46,13 @@ func _run() -> void:
 	check(entity._last_known == player.position, "audible noise updates last-known position")
 	for tick: int in 16:
 		entity._tick_hunt(0.5)
-	check(entity.state == Stalker.State.STALK, "unseen silent target lost after search timeout")
+	check(entity.state == Stalker.State.SEARCH, "lost hunt enters SEARCH sweep, not STALK")
+	check(not entity._search_pts.is_empty(), "search builds sweep points around last-known")
+	check(entity._last_known == player.position, "search holds last-known while target silent")
+	for tick: int in 26:
+		entity._tick_search(0.5)
+	check(entity._last_known == player.position, "sweep never invents a new destination")
+	check(entity.state == Stalker.State.STALK, "fruitless sweep expires to STALK")
 	entity._tick_stalk(0.1)
 	check(entity.state == Stalker.State.STALK, "proximity alone cannot reacquire through wall")
 	wall.queue_free()
@@ -54,6 +60,9 @@ func _run() -> void:
 	await physics_frame
 	entity._tick_stalk(0.1)
 	check(entity.state == Stalker.State.HUNT, "target reacquired when sight restored")
+	entity._start_search()
+	entity._tick_search(0.1)
+	check(entity.state == Stalker.State.HUNT, "search reacquires the instant sight returns")
 	player.queue_free()
 	entity.queue_free()
 	await process_frame

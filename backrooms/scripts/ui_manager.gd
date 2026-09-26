@@ -172,7 +172,13 @@ func _process(delta: float) -> void:
 		_rec_label.text = "REC ● 1996-03-14 " + _fmt_clock(game.elapsed)
 		if player != null:
 			_stamina_bar.value = player.stamina
-			_flash_label.text = "FLASH READY [F]" if player.flash_ready_frac() >= 1.0 else "FLASH ..."
+			var batt: int = roundi(player.flash_ready_frac() * 100.0)
+			if player.flash_ready_frac() <= 0.0:
+				_flash_label.text = "FLASHLIGHT DEAD [F]"
+			elif player.flashlight_on:
+				_flash_label.text = "FLASHLIGHT ON %d%% [F]" % batt
+			else:
+				_flash_label.text = "FLASHLIGHT OFF %d%% [F]" % batt
 		_food_bar.value = game.hunger
 		_water_bar.value = game.thirst
 		_food_bar.modulate = Color(1, 0.35, 0.3) if game.hunger < 0.25 else Color.WHITE
@@ -801,7 +807,7 @@ func _build_menu() -> void:
 	_mp_status.visible = false
 	vbox.add_child(_mp_status)
 	var help := Label.new()
-	help.text = "WASD move · Shift sprint (loud) · Ctrl crouch · F flash · E use · V view · R pack · J journal · G glowstick · Esc pause"
+	help.text = "WASD move · Shift sprint (loud) · Ctrl crouch · F flashlight · E use · V view · R pack · J journal · G glowstick · Esc pause"
 	help.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	help.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	help.add_theme_font_size_override("font_size", 13)

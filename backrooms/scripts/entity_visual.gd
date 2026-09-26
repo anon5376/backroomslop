@@ -216,7 +216,7 @@ func animate(delta: float, state: int, motion: Vector3, replica: bool, look_dire
 	jaw.rotation.x = -hunt_blend * (0.48 + breath * 0.06) - _anticipation * 0.08
 	eye_material.albedo_color = Color(0.45, 0.04, 0.03).lerp(Color(4.0, 0.15, 0.1), hunt_blend)
 	if is_instance_valid(eye_light):
-		var stalk_ember: float = 0.3 if state == 1 else 0.0
+		var stalk_ember: float = 0.3 if (state == 1 or state == 3) else 0.0
 		eye_light.light_energy = 1.5 * hunt_blend + stalk_ember
 	for i: int in 2:
 		var side: float = -1.0 if i == 0 else 1.0

@@ -1,17 +1,23 @@
 class_name Stalker
 extends CharacterBody3D
-## The entity. DORMANT (looms far away) -> STALK (teleports closer on
-## flicker events) -> HUNT (A* chase). Catch the player => SIGNAL LOST.
+## The entity. DORMANT (looms far away) -> STALK (patrols points of
+## interest, teleports closer on flicker events) -> HUNT (A* chase) ->
+## SEARCH (sweeps the last-known position, then gives up). Catch the
+## player => SIGNAL LOST. Deeper levels: faster, longer memory, wider search.
 
-enum State { DORMANT, STALK, HUNT }
+enum State { DORMANT, STALK, HUNT, SEARCH }
 
-const HUNT_SPEED: float = 4.8
+const HUNT_SPEED: float = 4.8  # L0 base; +0.2 per level, always below sprint
+const SEARCH_SPEED: float = 3.2
+const STALK_SPEED: float = 1.6
 const CATCH_DIST: float = 1.2
 const STARE_LIMIT: float = 3.0
 const STARE_ANGLE: float = 0.13  # ~7 degrees
 const LOSE_DIST: float = 45.0
-const LOSE_TIME: float = 6.0
+const LOSE_TIME: float = 6.0  # L0 base; +1.5s per level
 const REPLAN_TIME: float = 0.5
+const SEARCH_REPLAN: float = 1.5
+const AMBUSH_CHANCE: float = 0.35
 
 var state: int = State.DORMANT
 var active: bool = false
@@ -30,6 +36,11 @@ var _lose_t: float = 0.0
 var _suspicion: float = 0.0
 var _last_known: Vector3 = Vector3.ZERO
 var _heard_recently: float = 0.0
+var _search_t: float = 0.0
+var _search_pts: Array[Vector2i] = []
+var _search_i: int = 0
+var _patrol_goal: Vector2i = Vector2i(-1, -1)
+var _patrol_idle: float = 0.0
 
 const EntityVisual := preload("res://scripts/entity_visual.gd")
 
@@ -62,6 +73,11 @@ func setup(p_maze: MazeGenerator, p_player: Player, screech: AudioStream, drag: 
 	_lose_t = 0.0
 	_suspicion = 0.0
 	_heard_recently = 0.0
+	_search_t = 0.0
+	_search_pts.clear()
+	_search_i = 0
+	_patrol_goal = Vector2i(-1, -1)
+	_patrol_idle = 0.0
 	_prev_hunt = false
 	velocity = Vector3.ZERO
 	var cell: Vector2i = maze.random_entity_spawn()
@@ -95,6 +111,8 @@ func _physics_process(delta: float) -> void:
 			_tick_stalk(delta)
 		State.HUNT:
 			_tick_hunt(delta)
+		State.SEARCH:
+			_tick_search(delta)
 	_tick_stare(delta)
 	_tick_anim(delta)
 	move_and_slide()
@@ -125,18 +143,47 @@ func _prey() -> Node3D:
 		return extra_target
 	return player
 
+func _level() -> int:
+	if maze == null:
+		return 0
+	return clampi(maze.level_index, 0, 2)
+
+
+func _hunt_speed() -> float:
+	return HUNT_SPEED + 0.2 * float(_level())
+
+
+func _lose_limit() -> float:
+	return LOSE_TIME + 1.5 * float(_level())
+
+
+func _search_time() -> float:
+	return 12.0 + 4.0 * float(_level())
+
+
+func _search_points() -> int:
+	return 3 + _level()
+
+
+func _stalk_trigger(prey: Node3D) -> float:
+	var base: float = 5.0 if prey.get("crouched") == true else 10.0
+	return base + float(_level())
+
+
 func hear_noise(pos: Vector3, radius: float) -> void:
 	if puppet or not active:
 		return
 	var d: float = global_position.distance_to(pos)
 	if d > radius:
 		return
-	if state == State.HUNT:
+	if state == State.HUNT or state == State.SEARCH:
 		_last_known = pos
 		_heard_recently = 1.0
+		if state == State.SEARCH:
+			_start_search()  # recenter the sweep on the fresh sound
 		return
 	# Closer = more suspicious. Two close noises (or one very close) => HUNT.
-	_suspicion += clampf(1.2 - d / radius, 0.15, 1.0)
+	_suspicion += clampf(1.2 - d / radius, 0.15, 1.0) * (1.0 + 0.25 * float(_level()))
 	if _suspicion >= 1.0:
 		_start_hunt()
 	elif state == State.STALK and d < radius * 0.6:
@@ -167,21 +214,44 @@ func _tick_dormant(_delta: float) -> void:
 	if d < 12.0:
 		# Seen too close: vanish far away.
 		global_position = maze.cell_to_world(maze.random_entity_spawn(60, 200))
-	elif d < 30.0:
+	elif d < 30.0 + 5.0 * float(_level()):
 		state = State.STALK
 
 
 func _tick_stalk(delta: float) -> void:
-	velocity.x = 0.0
-	velocity.z = 0.0
 	_suspicion = maxf(0.0, _suspicion - 0.08 * delta)
 	var prey := _prey()
 	if prey == null:
+		velocity.x = 0.0
+		velocity.z = 0.0
 		return
 	# Crouched prey is harder to notice: the sight trigger halves.
-	var trigger: float = 5.0 if prey.get("crouched") == true else 10.0
-	if global_position.distance_to(prey.global_position) < trigger and _can_see(prey):
+	if global_position.distance_to(prey.global_position) < _stalk_trigger(prey) and _can_see(prey):
 		_start_hunt()
+		return
+	# No statue: drift between the level's key rooms, pausing to listen.
+	if _patrol_idle > 0.0:
+		velocity.x = 0.0
+		velocity.z = 0.0
+		_patrol_idle -= delta
+		return
+	if _patrol_goal.x < 0 or global_position.distance_to(maze.cell_to_world(_patrol_goal)) < 1.5:
+		if maze.key_cells.is_empty():
+			velocity.x = 0.0
+			velocity.z = 0.0
+			return
+		_patrol_goal = maze.key_cells[randi_range(0, maze.key_cells.size() - 1)]
+		_patrol_idle = randf_range(2.0, 5.0)
+		_replan_t = 0.0
+		velocity.x = 0.0
+		velocity.z = 0.0
+		return
+	_replan_t -= delta
+	if _replan_t <= 0.0:
+		_replan_t = SEARCH_REPLAN
+		_path = astar.find_path(maze.world_to_cell(global_position), _patrol_goal)
+		_path_i = 0
+	_steer_along_path(STALK_SPEED, delta, maze.cell_to_world(_patrol_goal))
 
 
 func _start_hunt() -> void:
@@ -194,6 +264,9 @@ func _start_hunt() -> void:
 	_heard_recently = 0.0
 	_lose_t = 0.0
 	_replan_t = 0.0
+	_search_pts.clear()
+	_search_i = 0
+	_patrol_goal = Vector2i(-1, -1)
 	_path.clear()
 	_path_i = 0
 	if not _screech.playing:
@@ -219,19 +292,117 @@ func _tick_hunt(delta: float) -> void:
 		_path_i = 0
 	var pp: Vector3 = prey.global_position
 	var dist: float = global_position.distance_to(pp)
-	if dist < CATCH_DIST and visible:
-		velocity = Vector3.ZERO
-		if prey == player:
-			# It caught the local (host) player.
-			if _game != null and _game.has_method("game_over"):
-				_game.game_over("caught")
-		elif _game != null:
-			# It caught the partner's avatar — tell their machine; the run
-			# continues for whoever is still alive.
-			var net: Node = _game.get("net")
-			if net != null and net.is_mp():
-				net.server_catch(net.remote_id)
+	if _try_catch(prey, dist, visible):
 		return
+	_steer_along_path(_hunt_speed(), delta, _last_known)
+	if dist > LOSE_DIST or (not visible and _heard_recently <= 0.0):
+		_lose_t += delta * (2.0 if prey.get("crouched") == true else 1.0)
+		if _lose_t >= _lose_limit():
+			_start_search()
+	else:
+		_lose_t = 0.0
+
+
+func _start_search() -> void:
+	"""Lost the trail: sweep the last-known position before giving up."""
+	state = State.SEARCH
+	_search_t = 0.0
+	_lose_t = 0.0
+	_patrol_goal = Vector2i(-1, -1)
+	_build_sweep()
+	_path.clear()
+	_path_i = 0
+	_replan_t = 0.0
+	velocity.x = 0.0
+	velocity.z = 0.0
+
+
+func _build_sweep() -> void:
+	_search_pts.clear()
+	_search_i = 0
+	var center: Vector2i = maze.world_to_cell(_last_known)
+	if astar.is_walkable(center):
+		_search_pts.append(center)
+	var want: int = _search_points()
+	for attempt: int in want * 12:
+		if _search_pts.size() >= want + 1:
+			break
+		var ang: float = randf_range(0.0, TAU)
+		var r: float = randf_range(2.0, 4.0)
+		var c := Vector2i(int(round(center.x + cos(ang) * r)), int(round(center.y + sin(ang) * r)))
+		if not astar.is_walkable(c) or _search_pts.has(c):
+			continue
+		if astar.find_path(maze.world_to_cell(global_position), c).is_empty():
+			continue
+		_search_pts.append(c)
+
+
+func _tick_search(delta: float) -> void:
+	var prey := _prey()
+	if prey == null:
+		state = State.STALK
+		_suspicion = 0.0
+		velocity.x = 0.0
+		velocity.z = 0.0
+		return
+	_search_t += delta
+	if _search_t >= _search_time():
+		state = State.STALK
+		_suspicion = 0.0
+		_search_pts.clear()
+		velocity.x = 0.0
+		velocity.z = 0.0
+		return
+	var visible: bool = _can_see(prey)
+	if visible:
+		_start_hunt()  # found you: back on the trail
+		return
+	_heard_recently = maxf(0.0, _heard_recently - delta)
+	if _try_catch(prey, global_position.distance_to(prey.global_position), visible):
+		return
+	# Walk the sweep points; finished or unreachable => give up.
+	while _search_i < _search_pts.size():
+		var target: Vector3 = maze.cell_to_world(_search_pts[_search_i])
+		if global_position.distance_to(target) < 1.5:
+			_search_i += 1
+			_replan_t = 0.0
+		else:
+			break
+	if _search_i >= _search_pts.size():
+		state = State.STALK
+		_suspicion = 0.0
+		velocity.x = 0.0
+		velocity.z = 0.0
+		return
+	_replan_t -= delta
+	if _replan_t <= 0.0:
+		_replan_t = SEARCH_REPLAN
+		_path = astar.find_path(maze.world_to_cell(global_position), _search_pts[_search_i])
+		_path_i = 0
+		if _path.is_empty():
+			_search_i += 1  # unreachable from here: skip it
+			return
+	_steer_along_path(SEARCH_SPEED, delta, maze.cell_to_world(_search_pts[_search_i]))
+
+
+func _try_catch(prey: Node3D, dist: float, visible: bool) -> bool:
+	if dist >= CATCH_DIST or not visible:
+		return false
+	velocity = Vector3.ZERO
+	if prey == player:
+		# It caught the local (host) player.
+		if _game != null and _game.has_method("game_over"):
+			_game.game_over("caught")
+	elif _game != null:
+		# It caught the partner's avatar — tell their machine; the run
+		# continues for whoever is still alive.
+		var net: Node = _game.get("net")
+		if net != null and net.is_mp():
+			net.server_catch(net.remote_id)
+	return true
+
+
+func _steer_along_path(speed: float, delta: float, dest: Vector3) -> void:
 	# Follow waypoints (skip the ones we're already on top of).
 	while _path_i < _path.size():
 		var wp: Vector3 = maze.cell_to_world(_path[_path_i])
@@ -245,24 +416,13 @@ func _tick_hunt(delta: float) -> void:
 		var wp: Vector3 = maze.cell_to_world(_path[_path_i])
 		dir = Vector3(wp.x - global_position.x, 0, wp.z - global_position.z).normalized()
 	else:
-		var remaining := Vector3(_last_known.x - global_position.x, 0, _last_known.z - global_position.z)
+		var remaining := Vector3(dest.x - global_position.x, 0, dest.z - global_position.z)
 		if remaining.length() > 0.3:
 			dir = remaining.normalized()
-	velocity.x = dir.x * HUNT_SPEED
-	velocity.z = dir.z * HUNT_SPEED
-	if dist > 0.5:
-		var target_yaw: float = atan2(dir.x, dir.z)
-		rotation.y = lerp_angle(rotation.y, target_yaw, minf(delta * 6.0, 1.0))
-	if dist > LOSE_DIST or (not visible and _heard_recently <= 0.0):
-		_lose_t += delta * (2.0 if prey.get("crouched") == true else 1.0)
-		if _lose_t >= LOSE_TIME:
-			state = State.STALK
-			_suspicion = 0.0
-			_path.clear()
-			velocity.x = 0.0
-			velocity.z = 0.0
-	else:
-		_lose_t = 0.0
+	velocity.x = dir.x * speed
+	velocity.z = dir.z * speed
+	if dir.length_squared() > 0.001:
+		rotation.y = lerp_angle(rotation.y, atan2(dir.x, dir.z), minf(delta * 6.0, 1.0))
 
 
 func _tick_stare(delta: float) -> void:
@@ -340,8 +500,32 @@ func _teleport_ring_player(rmin: float, rmax: float, in_view: bool) -> void:
 	var prey := _prey()
 	if prey == null:
 		return
+	if randf() < AMBUSH_CHANCE and _teleport_ahead(prey):
+		_face_player()
+		return
 	global_position = maze.cell_to_world(_random_reachable_in_ring(prey.global_position, rmin, rmax, in_view and prey == player))
 	_face_player()
+
+
+func _teleport_ahead(prey: Node3D) -> bool:
+	"""Appear in front of where the prey is going. False => fall back to ring."""
+	var dir := Vector3.ZERO
+	if "velocity" in prey and (prey.get("velocity") as Vector3).length() > 1.0:
+		dir = prey.get("velocity") as Vector3
+	else:
+		dir = -prey.global_transform.basis.z
+	dir.y = 0.0
+	if dir.length_squared() < 0.001:
+		return false
+	dir = dir.normalized()
+	var cell: Vector2i = maze._nearest_floor(maze.world_to_cell(prey.global_position + dir * 18.0))
+	var spot: Vector3 = maze.cell_to_world(cell)
+	if spot.distance_to(prey.global_position) > 30.0:
+		return false
+	if maze.dist_map[cell.y * MazeGenerator.GRID_W + cell.x] == -1:
+		return false
+	global_position = spot
+	return true
 
 
 func _face_player() -> void:

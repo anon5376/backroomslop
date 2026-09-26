@@ -38,7 +38,7 @@ exits 0 with no errors, generation + spawn + all managers work.
 | Mouse | Look |
 | Shift | Sprint (loud — it hears you) |
 | Ctrl / C | Crouch (quiet) |
-| F | Camera flash (2s cooldown, brief light) |
+| F | Flashlight (toggle, ~8 min battery, recharges when off) |
 | E | Interact (doors, almond water, bread) |
 | V | Cycle view: 1st / chase / front |
 | Esc / P | Pause |

@@ -14,7 +14,7 @@ through the white door. Something in the corridors is learning you.
 - **193×193 handmade-feel maze per level** (~579 m per side). Same landmarks,
   separated by dense level-specific filler: partition drift + baffles (L0),
   hall grid + pillar breaks (L1), pipe backbones + hatches (L2).
-- Survival meters (water/food/stamina), flash pulse, 3 glowsticks, field journal,
+- Survival meters (water/food/stamina), toggle flashlight, 3 glowsticks, field journal,
   crouch-to-hide stealth, and a stalker entity that hunts by sound and sight.
 - **2-player co-op** over LAN (host/join from the menu), shared objectives.
 
@@ -26,9 +26,11 @@ If the normal app hangs on launch, use `PLAY-BACKROOMS-SAFE.command` (OpenGL ren
 Or run from source with Godot 4.6 (fetches CC0 assets first, ~27 MB):
 
 ```sh
-cd backrooms && python3 tools/fetch_assets.py && cd ..
+cd backrooms && python3 tools/fetch_assets.py && python3 tools/bake_materials.py && cd ..
 godot --path backrooms
 ```
+(`bake_materials.py` needs numpy + Pillow; without it the game falls back to
+slower runtime-generated normals.)
 
 Seeded runs: enter a seed on the menu (default 1234) — same seed, same maze.
 
@@ -45,7 +47,7 @@ zone/marker legend, 14 in-game screenshots, maze vistas, controls, zone guide.
 | W A S D / arrows | Move (mouse looks) |
 | Shift | Sprint — fast but loud |
 | Ctrl / C | Crouch (toggle) — quiet |
-| F | Flash pulse (see in the dark) |
+| F | Flashlight (toggle, long battery) |
 | E | Use: grab, read, station, exit |
 | Q | Eat bread |
 | R | Supply pack |

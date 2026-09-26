@@ -23,8 +23,8 @@ far = 600.0
 
 [node name="Flash" type="SpotLight3D" parent="Head"]
 visible = false
-light_energy = 3.0
-spot_range = 10.0
-spot_angle = 32.0
+light_energy = 2.2
+spot_range = 18.0
+spot_angle = 30.0
 
 [node name="Steps" type="AudioStreamPlayer" parent="."]

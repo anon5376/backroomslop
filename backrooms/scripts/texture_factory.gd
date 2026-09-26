@@ -105,7 +105,7 @@ static func make_wall_material(tex: Texture2D) -> StandardMaterial3D:
 	m.roughness = 0.92
 	m.uv1_triplanar = true
 	m.uv1_scale = Vector3(0.5, 0.5, 0.5)
-	m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
 	return m
 
 
@@ -115,7 +115,7 @@ static func make_floor_material(tex: Texture2D) -> StandardMaterial3D:
 	m.roughness = 0.98
 	m.uv1_triplanar = true
 	m.uv1_scale = Vector3(0.5, 0.5, 0.5)
-	m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
 	return m
 
 
@@ -125,7 +125,7 @@ static func make_ceiling_material(tex: Texture2D) -> StandardMaterial3D:
 	m.roughness = 0.9
 	m.uv1_triplanar = true
 	m.uv1_scale = Vector3(1.0, 1.0, 1.0)
-	m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
 	return m
 
 
@@ -349,15 +349,21 @@ static func load_materials(rng: RandomNumberGenerator, level: int = 0) -> Dictio
 		ceil_mat.albedo_color = Color(0.35, 0.35, 0.38)
 	var hazard_mat := make_wall_material(make_hazard(rng))
 	var metaldor_mat := make_wall_material(make_metaldor(rng))
+	var pbr_pairs: Array = [[wallb_mat, "wall_b"], [wall2_mat, "concrete"], [svc_mat, "concrete"], [wall3_mat, "server"], [srv_mat, "floor_server"]]
+	if level == 0:
+		pbr_pairs += [[wall_mat, "wall"], [floor_mat, "carpet"], [ceil_mat, "ceiling"]]
+	var baked_mats := {}
+	for pair: Array in pbr_pairs:
+		if ResourceLoader.exists("res://assets/materials/%s_albedo.png" % pair[1]):
+			baked_mats[pair[0]] = true
 	for entry: Array in [[wall_mat, wall_tex, 0.5], [floor_mat, floor_tex, 0.7], [ceil_mat, ceil_tex, 0.4], [wall2_mat, wall2_tex, 0.6], [wall3_mat, wall3_tex, 0.5], [wallb_mat, wallb_tex, 0.5], [svc_mat, wall2_tex, 0.5], [srv_mat, srv_tex, 0.4]]:
+		if baked_mats.has(entry[0]):
+			continue  # baked PBR below replaces albedo+normal wholesale; Sobel is pure waste
 		var nrm: Texture2D = normal_from_luminance(entry[1])
 		if nrm != null:
 			(entry[0] as StandardMaterial3D).normal_enabled = true
 			(entry[0] as StandardMaterial3D).normal_texture = nrm
 			(entry[0] as StandardMaterial3D).normal_scale = float(entry[2])
-	var pbr_pairs: Array = [[wallb_mat, "wall_b"], [wall2_mat, "concrete"], [svc_mat, "concrete"], [wall3_mat, "server"], [srv_mat, "floor_server"]]
-	if level == 0:
-		pbr_pairs += [[wall_mat, "wall"], [floor_mat, "carpet"], [ceil_mat, "ceiling"]]
 	for pair: Array in pbr_pairs:
 		_apply_pbr(pair[0], pair[1])
 	return {
