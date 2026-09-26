@@ -77,7 +77,7 @@ func _fixture(cells: Array[Vector2i], p_start: Vector3, e_start: Vector3) -> voi
 		borders.erase(cell)
 	for cell: Vector2i in borders:
 		_box(maze.cell_to_world(cell) + Vector3(0, 1.5, 0), Vector3(3, 3, 3))
-	_box(Vector3(0, -0.25, -42), Vector3(40, 0.5, 110))
+	_box(Vector3(0, -0.25, -60), Vector3(44, 0.5, 132))
 	player = PLAYER_SCENE.instantiate() as Player
 	entity = ENTITY_SCENE.instantiate() as Stalker
 	recorder = CatchRecorder.new()
@@ -139,8 +139,8 @@ func _physics_checks(label: String) -> void:
 
 func _close_catch(with_wall: bool) -> void:
 	var cells: Array[Vector2i] = []
-	for x: int in range(29, 32):
-		for z: int in range(29, 32):
+	for x: int in range(95, 98):
+		for z: int in range(95, 98):
 			cells.append(Vector2i(x, z))
 	_fixture(cells, Vector3(0.45, 0, 0), Vector3(-0.45, 0, 0))
 	if with_wall:
@@ -170,15 +170,24 @@ func _close_catch(with_wall: bool) -> void:
 
 func _escape() -> void:
 	var cells: Array[Vector2i] = []
-	# A three-metre-wide dogleg with two right-angle corners; grid and collider
-	# geometry agree. Long approach gives the production sprint a fair head start.
-	for z: int in range(5, 32):
-		cells.append(Vector2i(30, z))
-	for x: int in range(31, 34):
-		cells.append(Vector2i(x, 5))
-	for z: int in range(1, 5):
-		cells.append(Vector2i(33, z))
-	_fixture(cells, Vector3(0, 0, -15), Vector3.ZERO)
+	# Dogleg with a silent final leg: sprint the first three legs, then walk
+	# (7m noise) around two more corners. Memory freezes at the last sprint
+	# step; the hide sits 24m+ beyond, occluded and outside the sweep ring.
+	for z: int in range(71, 98):  # leg A: world x=0, z=-75..3
+		cells.append(Vector2i(96, z))
+	for x: int in range(97, 100):  # leg B: world z=-75, x=3..9
+		cells.append(Vector2i(x, 71))
+	for z: int in range(67, 71):  # leg C: world x=9, z=-87..-78
+		cells.append(Vector2i(99, z))
+	for x: int in range(97, 99):  # leg D: world (3..9, -84), 6m
+		cells.append(Vector2i(x, 68))
+	for z: int in range(66, 68):  # leg E: world (3, -90..-84), 6m
+		cells.append(Vector2i(97, z))
+	for x: int in range(95, 97):  # leg F: world (-3..3, -90), 6m
+		cells.append(Vector2i(x, 66))
+	for z: int in range(62, 66):  # leg G: world (-3, -102..-90), 12m
+		cells.append(Vector2i(95, z))
+	_fixture(cells, Vector3(0, 0, -45), Vector3(0, 0, -30))
 	player.rotation.y = PI # Look at the entity: production stare triggers HUNT.
 	for tick: int in range(240):
 		await _step()
@@ -186,7 +195,12 @@ func _escape() -> void:
 			break
 	check(entity.state == Stalker.State.HUNT, "escape: hunt acquired naturally by staring")
 	print("TRACE acquired tick=%d separation=%.3f" % [tick_count, player.position.distance_to(entity.position)])
-	var points: Array[Vector3] = [Vector3(0, 0, -75), Vector3(9, 0, -75), Vector3(9, 0, -84)]
+	# Sprint the first three legs, then walk (7m noise) through four corners.
+	# Memory freezes at corner3; the hide sits 24m beyond, occluded from the
+	# whole sweep ring by inner-corner walls. Walk clears 19m before SEARCH
+	# starts, so the sweep never gets line of sight.
+	var points: Array[Vector3] = [Vector3(0, 0, -75), Vector3(9, 0, -75), Vector3(9, 0, -84),
+		Vector3(3, 0, -84), Vector3(3, 0, -90), Vector3(-3, 0, -90), Vector3(-3, 0, -102)]
 	var waypoint := 0
 	var sprint_ticks := 0
 	var heard_ticks := 0
@@ -197,7 +211,9 @@ func _escape() -> void:
 		entity.maze.world_to_cell(points.back())).is_empty(), "escape: hiding destination is path-reachable")
 	Input.action_press("move_forward")
 	Input.action_press("sprint")
-	for tick: int in range(1200):
+	for tick: int in range(1600):
+		if waypoint == 3 and Input.is_action_pressed("sprint"):
+			Input.action_release("sprint")  # corner3: go quiet, memory freezes here
 		var direction := points[waypoint] - player.position
 		direction.y = 0
 		if direction.length() < 0.3:
@@ -219,10 +235,10 @@ func _escape() -> void:
 		if recorder.catches > 0:
 			break
 	_release() # Deceleration, residual footsteps and stamina are still production code.
-	check(reached, "escape: reaches hiding place by movement around both corners")
+	check(reached, "escape: reaches hiding place by movement around the corners")
 	check(sprint_ticks > 60 and heard_ticks > 0 and min_stamina < 0.9,
 		"escape: real sprint/stamina and audible production footsteps exercised")
-	check(entity.state == Stalker.State.HUNT, "escape: still hunted when hiding begins")
+	check(entity.state == Stalker.State.HUNT or entity.state == Stalker.State.SEARCH, "escape: still pursued when hiding begins")
 	var hide_start := player.position
 	var memory_at_hide := entity._last_known
 	var memory_stable := true
@@ -230,7 +246,8 @@ func _escape() -> void:
 	var lost_tick := -1
 	var seen_hiding := 0
 	var stable_stalk := 0
-	for tick: int in range(720): # Twelve seconds, including deceleration and > LOSE_TIME.
+	var search_seen := false
+	for tick: int in range(1800): # Thirty seconds: HUNT loss + full sweep + STALK settle.
 		await _step()
 		max_separation = maxf(max_separation, player.position.distance_to(entity.position))
 		memory_stable = memory_stable and entity._last_known.is_equal_approx(memory_at_hide)
@@ -238,13 +255,15 @@ func _escape() -> void:
 			silent_ticks += 1
 		if entity._can_see(player):
 			seen_hiding += 1
+		if entity.state == Stalker.State.SEARCH:
+			search_seen = true
 		if entity.state == Stalker.State.STALK:
 			if lost_tick < 0:
 				lost_tick = tick
 			stable_stalk += 1
 		else:
 			stable_stalk = 0
-		if tick % 120 == 0:
+		if tick % 300 == 0:
 			print("TRACE hide=%.2f player=%s entity=%s memory=%s state=%d lose=%.3f heard=%.3f catches=%d" %
 				[float(tick) / TICKS, player.position, entity.position, entity._last_known,
 				entity.state, entity._lose_t, entity._heard_recently, recorder.catches])
@@ -255,11 +274,12 @@ func _escape() -> void:
 		"escape: hiding is stationary after natural deceleration")
 	check(seen_hiding == 0, "escape: hiding place stays occluded")
 	check(max_separation < Stalker.LOSE_DIST, "escape: never uses distance-based hunt loss (max %.3fm)" % max_separation)
-	check(memory_stable and silent_ticks == 720, "escape: silent hiding never refreshes last-known position")
+	check(memory_stable and silent_ticks == 1800, "escape: silent hiding never refreshes last-known position")
 	check(entity_distance > 20.0 and player_distance > 60.0,
 		"escape: both actors physically traverse the corridor, not a frozen-AI timeout")
 	check(lost_tick >= 0 and stable_stalk >= 120,
-		"escape: HUNT expires and remains STALK for at least two seconds")
+		"escape: pursuit expires and remains STALK for at least two seconds")
+	check(search_seen, "escape: entity swept the last-known area before giving up")
 	print("RESULT escape: distance player=%.3f entity=%.3f sprint_ticks=%d heard_ticks=%d min_stamina=%.3f lost_hide_tick=%d stable_stalk_ticks=%d" %
 		[player_distance, entity_distance, sprint_ticks, heard_ticks, min_stamina, lost_tick, stable_stalk])
 	_physics_checks("escape")

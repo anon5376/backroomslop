@@ -151,6 +151,7 @@ func start_game(seed_value: int) -> void:
 	entity._face_player()
 	lights.active = true
 	scare.active = true
+	audio.set_level_ambience(level_index)
 	audio.start_ambience()
 	ui.show_hud(current_seed)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -241,6 +242,7 @@ func descend() -> void:
 	if net != null and net.has_method("reset_level"):
 		net.call("reset_level")
 	player.active = not (mp_dead or mp_escaped)
+	audio.set_level_ambience(level_index)
 	ui.show_hud(current_seed)
 	ui.show_level_banner(MazeGenerator.LEVEL_NAMES[level_index])
 	level_changed.emit(level_index)

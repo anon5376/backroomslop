@@ -76,6 +76,12 @@ func run() -> void:
 	check(audio.get_master_volume() == 0.0, "invalid volume")
 	audio.set_master_volume(4.0)
 	check(audio.get_master_volume() == 1.0 and not AudioServer.is_bus_mute(0), "volume clamp")
+	check(audio._drone_levels.size() == 3, "three level drones")
+	check(audio._drone_levels[0] != audio._drone_levels[1] and audio._drone_levels[1] != audio._drone_levels[2], "drones distinct per level")
+	audio.set_level_ambience(2)
+	check(audio._drone_player.stream == audio._drone_levels[2], "ambience switches to L2 bed")
+	audio.set_level_ambience(9)
+	check(audio._drone_player.stream == audio._drone_levels[2], "ambience clamps level")
 	for prop: Node3D in props:
 		prop.free()
 	door.free()

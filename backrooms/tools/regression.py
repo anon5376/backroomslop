@@ -21,6 +21,7 @@ TESTS = {
     "entity": ("res://tools/entity_visual_test.gd", "ENTITY VISUAL RESULT 0 failures"),
     "props_audio": ("res://tools/prop_audio_test.gd", "PROP_AUDIO TEST: ALL PASS"),
     "pursuit": ("res://tools/pursuit_test.gd", "PURSUIT TEST: ALL PASS"),
+    "pursuit_escape": ("res://tools/pursuit_escape_test.gd", "PURSUIT ESCAPE TEST: ALL PASS"),
     "volume_ui": ("res://tools/volume_ui_test.gd", "VOLUME_UI TEST: ALL PASS"),
     "crouch": ("res://tools/crouch_test.gd", "CROUCH TEST: ALL PASS"),
     "route_hint": ("res://tools/route_hint_test.gd", "ROUTE HINT TEST: ALL PASS"),

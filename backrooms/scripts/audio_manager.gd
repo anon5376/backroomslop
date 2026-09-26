@@ -19,6 +19,8 @@ var beacon_stream: AudioStream
 var _death_player: AudioStreamPlayer
 var _win_player: AudioStreamPlayer
 var _drone_player: AudioStreamPlayer
+var _drone_levels: Array[AudioStream] = []
+var _amb_level: int = -1
 var _steps: Array[AudioStream] = []
 var _last_step: int = -1
 var _step_count: int = 0
@@ -145,6 +147,11 @@ func _ready() -> void:
 	get_tree().node_added.connect(_route_audio, CONNECT_DEFERRED)
 	hum_stream = _slot_or_synth("hum_loop", _synth_hum)
 	drone_stream = _slot_or_synth("drone_loop", _synth_drone)
+	_drone_levels = [
+		drone_stream,
+		_slot_or_synth("drone_loop_l1", _synth_drone_l1),
+		_slot_or_synth("drone_loop_l2", _synth_drone_l2),
+	]
 	screech_stream = _slot_or_synth("screech", _synth_screech)
 	thunk_stream = _slot_or_synth("thunk", _synth_thunk)
 	creak_stream = _slot_or_synth("creak", _synth_creak)
@@ -175,6 +182,17 @@ func start_ambience() -> void:
 
 func stop_ambience() -> void:
 	_drone_player.stop()
+
+
+func set_level_ambience(level: int) -> void:
+	var lv: int = clampi(level, 0, 2)
+	if lv == _amb_level or _drone_levels.size() < 3:
+		return
+	_amb_level = lv
+	var was_playing: bool = _drone_player.playing
+	_drone_player.stream = _drone_levels[lv]
+	if was_playing:
+		_drone_player.play()
 
 
 func play_step(intensity: float, player: AudioStreamPlayer) -> void:
@@ -297,6 +315,47 @@ func _synth_drone() -> AudioStreamWAV:
 		lp = lp * 0.985 + (rng.randf() * 2.0 - 1.0) * 0.015
 		v += lp * 2.2
 		v *= 0.8 + 0.2 * sin(TAU * 0.125 * t + 0.5)
+		s[i] = v * 0.5
+	return _to_wav(s, true)
+
+
+func _synth_drone_l1() -> AudioStreamWAV:
+	# 8s hollow concrete bed: 49/73.5Hz pair, slow breathing, airy wash.
+	# Integer cycles (392/588) so the loop has no click.
+	var n: int = RATE * 8
+	var s := PackedFloat32Array()
+	s.resize(n)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 33
+	var lp: float = 0.0
+	for i: int in n:
+		var t: float = float(i) / float(RATE)
+		var v: float = 0.22 * sin(TAU * 49.0 * t)
+		v += 0.12 * sin(TAU * 73.5 * t + 0.6)
+		lp = lp * 0.978 + (rng.randf() * 2.0 - 1.0) * 0.022
+		v += lp * 2.6
+		v *= 0.75 + 0.25 * sin(TAU * 0.125 * t + 2.1)
+		s[i] = v * 0.5
+	return _to_wav(s, true)
+
+
+func _synth_drone_l2() -> AudioStreamWAV:
+	# 8s cold machine bed: 62.5/93.75Hz pair plus a faint 125Hz whine.
+	# Integer cycles (500/750/1000) so the loop has no click.
+	var n: int = RATE * 8
+	var s := PackedFloat32Array()
+	s.resize(n)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 55
+	var lp: float = 0.0
+	for i: int in n:
+		var t: float = float(i) / float(RATE)
+		var v: float = 0.20 * sin(TAU * 62.5 * t)
+		v += 0.11 * sin(TAU * 93.75 * t + 2.4)
+		v += 0.04 * sin(TAU * 125.0 * t + 0.9)
+		lp = lp * 0.988 + (rng.randf() * 2.0 - 1.0) * 0.012
+		v += lp * 1.8
+		v *= 0.85 + 0.15 * sin(TAU * 0.25 * t + 4.0)
 		s[i] = v * 0.5
 	return _to_wav(s, true)
 

@@ -28,6 +28,9 @@ func _run() -> void:
 		check(scene.env.glow_enabled == (preset == "High"), "%s glow state" % preset)
 		if preset == "Low":
 			check(not scene.env.sdfgi_enabled and not scene.env.volumetric_fog_enabled, "Low disables expensive environment effects")
+		else:
+			check(not scene.env.sdfgi_enabled and not scene.env.volumetric_fog_enabled and not scene.env.ssil_enabled, "High skips SDFGI/volumetrics/SSIL")
+			check(scene.env.ssao_enabled == scene._supports_forward_effects(), "High keeps SSAO where supported")
 	scene.free()
 	root.scaling_3d_scale = original_scale
 	root.scaling_3d_mode = original_mode

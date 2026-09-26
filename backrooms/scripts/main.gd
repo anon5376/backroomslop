@@ -153,10 +153,10 @@ func apply_graphics_preset(p: String) -> void:
 		get_viewport().scaling_3d_mode = Viewport.SCALING_3D_MODE_FSR2 if _supports_forward_effects() else Viewport.SCALING_3D_MODE_BILINEAR
 		get_viewport().scaling_3d_scale = 0.67
 	else:
-		env.sdfgi_enabled = _supports_forward_effects()
-		env.volumetric_fog_enabled = _supports_forward_effects()
+		env.sdfgi_enabled = false
+		env.volumetric_fog_enabled = false
 		env.ssao_enabled = _supports_forward_effects()
-		env.ssil_enabled = _supports_forward_effects()
+		env.ssil_enabled = false
 		env.glow_enabled = true
 		get_viewport().scaling_3d_mode = Viewport.SCALING_3D_MODE_BILINEAR
 		get_viewport().scaling_3d_scale = 1.0
@@ -176,12 +176,14 @@ func _build_environment() -> void:
 	env.fog_light_energy = 0.8
 	apply_level_env(0)
 	env.glow_enabled = true
-	env.sdfgi_enabled = _supports_forward_effects()
-	env.volumetric_fog_enabled = _supports_forward_effects()
+	# Light stack by default: SDFGI, volumetrics and SSIL cost more than they
+	# give in flat-lit interiors. Standard fog + SSAO carry the look.
+	env.sdfgi_enabled = false
+	env.volumetric_fog_enabled = false
 	env.ssao_enabled = _supports_forward_effects()
 	env.ssao_intensity = 0.6
 	env.ssao_radius = 0.8
-	env.ssil_enabled = _supports_forward_effects()
+	env.ssil_enabled = false
 	env.ssil_intensity = 0.5
 	env.tonemap_mode = Environment.TONE_MAPPER_FILMIC
 	env.adjustment_enabled = true
@@ -218,7 +220,7 @@ func apply_level_env(level: int) -> void:
 			env.ambient_light_energy = 0.25
 			env.fog_light_color = Color(0.20, 0.26, 0.38)
 			env.fog_light_energy = 0.8
-			env.fog_density = 0.055
+			env.fog_density = 0.045
 			env.tonemap_exposure = 0.80
 
 
