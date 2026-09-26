@@ -115,6 +115,12 @@ func wall_mat_of(cell: Vector2i) -> int:
 		return 3
 	if r == "lobby":
 		return 0
+	if r == "west":
+		# Seeded accent walls: ~12% of west walls wear yellow wallpaper A.
+		# Pure hash: deterministic per seed, touches no RNG stream.
+		if abs(cell.x * 73 + cell.y * 151 + seed_used * 37) % 100 < 12:
+			return 0
+		return 1
 	return 1
 
 
@@ -1062,12 +1068,17 @@ func build_dressing(parent: Node3D, mats: Dictionary, audio: AudioManager) -> Di
 	flicker_mat.set_shader_parameter("flicker_enabled", 1.0)
 	var steady_dim := ShaderMaterial.new()
 	steady_dim.shader = panel_shader
-	steady_dim.set_shader_parameter("steady_color", Color(0.72, 0.75, 0.72))
 	steady_dim.set_shader_parameter("energy", 1.0)
 	var steady_cool := ShaderMaterial.new()
 	steady_cool.shader = panel_shader
-	steady_cool.set_shader_parameter("steady_color", Color(0.72, 0.86, 1.0))
 	steady_cool.set_shader_parameter("energy", 1.9)
+	# Per-run color temperature drift: same fixtures, different night.
+	# Local RNG: deterministic per seed, shared dressing stream untouched.
+	var drift_rng := RandomNumberGenerator.new()
+	drift_rng.seed = seed_used ^ 0x5EED
+	steady_mat.set_shader_parameter("steady_color", Color(1.0, drift_rng.randf_range(0.88, 0.97), drift_rng.randf_range(0.66, 0.78)))
+	steady_dim.set_shader_parameter("steady_color", Color(0.72, drift_rng.randf_range(0.72, 0.78), drift_rng.randf_range(0.68, 0.76)))
+	steady_cool.set_shader_parameter("steady_color", Color(drift_rng.randf_range(0.68, 0.76), drift_rng.randf_range(0.83, 0.89), 1.0))
 	var dead_mat := StandardMaterial3D.new()
 	dead_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	dead_mat.albedo_color = Color(0.045, 0.045, 0.045)
@@ -1227,17 +1238,19 @@ func build_dressing(parent: Node3D, mats: Dictionary, audio: AudioManager) -> Di
 				rack.name = "ServerRack_%d_%d" % [k, int(rz)]
 				rack.position = Vector3(146.0 + float(k) * 3.0, 0, rz)
 				parent.add_child(rack)
-	# --- Survival pickups: 14 water + 12 bread, random per run.
+	# --- Survival pickups: ~42 water + ~36 bread (seed-varied ±8), random per run.
 	# 8m+ from spawn, 2m+ apart, never on the exit cell.
 	# Build order is deterministic per seed, so net ids match on both peers.
 	rng.seed = seed_used * 7919 + 17
+	var water_target: int = 42 + _seed_jitter(seed_used, 8)
+	var bread_target: int = 36 + _seed_jitter(seed_used ^ 0xBEAD, 8)
 	var placed: Array[Vector3] = []
 	var spawn_w: Vector3 = cell_to_world(spawn_cell)
 	var water_n: int = 0
 	var net_i: int = 0
 	var pickups_out: Array = []
 	var guard: int = 0
-	while water_n < 42 and guard < 2400:
+	while water_n < water_target and guard < 2400:
 		guard += 1
 		var wc: Vector2i = _random_floor_cell()
 		if wc == exit_cell:
@@ -1256,7 +1269,7 @@ func build_dressing(parent: Node3D, mats: Dictionary, audio: AudioManager) -> Di
 		water_n += 1
 	var bread_n: int = 0
 	guard = 0
-	while bread_n < 36 and guard < 2400:
+	while bread_n < bread_target and guard < 2400:
 		guard += 1
 		var bc: Vector2i = _random_floor_cell()
 		if bc == exit_cell:
@@ -1400,6 +1413,11 @@ func build_dressing(parent: Node3D, mats: Dictionary, audio: AudioManager) -> Di
 		"pickup_bread": bread_n,
 		"pickups": pickups_out,
 	}
+
+
+func _seed_jitter(s: int, amp: int) -> int:
+	"""Deterministic [-amp, +amp] from a seed. Pure: touches no RNG stream."""
+	return abs(s * 7919 + 17) % (2 * amp + 1) - amp
 
 
 func _too_close(p: Vector3, placed: Array[Vector3]) -> bool:

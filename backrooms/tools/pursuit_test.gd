@@ -63,6 +63,14 @@ func _run() -> void:
 	entity._start_search()
 	entity._tick_search(0.1)
 	check(entity.state == Stalker.State.HUNT, "search reacquires the instant sight returns")
+	check(entity._aggression() >= 0.9 and entity._aggression() <= 1.1, "seed temperament in [0.9, 1.1]")
+	var variants := {0: false, 1: false, 2: false}
+	var scare := ScareDirector.new()
+	for draw: int in 90:
+		var v: int = scare._pick_variant()
+		check(v >= 0 and v <= 2, "scare variant in range")
+		variants[v] = true
+	check(variants[0] and variants[1] and variants[2], "all three scare variants appear")
 	player.queue_free()
 	entity.queue_free()
 	await process_frame

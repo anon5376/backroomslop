@@ -14,6 +14,33 @@ func check(ok: bool, label: String) -> void:
 func snapshot(m: MazeGenerator) -> Array:
 	return [m.seed_used, m.grid.duplicate(), m.spawn_cell, m.exit_cell, m.spawn_yaw, m.pillar_cells.duplicate(), m.flicker_zones.duplicate(true), m.dark_zones.duplicate(true), m.prop_clusters.duplicate(true), m.humming_rooms.duplicate(true), m.fixture_state.duplicate(), m.fixture_phase.duplicate(), m.fixture_warmth.duplicate(), m.fixture_hanging.duplicate(), m.dist_map.duplicate(), m.region_rects.duplicate(true), m.district_rects.duplicate(true)]
 
+func count_accents(m: MazeGenerator) -> Array:
+	"""[west wall count, accent count, district-material violations]."""
+	var west_w: int = 0
+	var accents: int = 0
+	var bad: int = 0
+	for yy: int in MG.GRID_H:
+		for xx: int in MG.GRID_W:
+			if m.grid[yy * MG.GRID_W + xx] == 0:
+				continue
+			var wc := Vector2i(xx, yy)
+			var r: String = m.region_of(wc)
+			var mat: int = m.wall_mat_of(wc)
+			if r == "west":
+				west_w += 1
+				if mat == 0:
+					accents += 1
+				elif mat != 1:
+					bad += 1
+			elif r == "service" and mat != 2:
+				bad += 1
+			elif (r == "server" or r == "machine") and mat != 3:
+				bad += 1
+			elif r == "lobby" and mat != 0:
+				bad += 1
+	return [west_w, accents, bad]
+
+
 func flood(m: MazeGenerator) -> Dictionary:
 	# Independent BFS: do not trust the generator's cached distance map.
 	var reached: Dictionary = {m.spawn_cell: 0}
@@ -89,6 +116,9 @@ func _init() -> void:
 			if not (m.fixture_state[i] <= MG.F_DEAD and (m.grid[i] == 0 or m.fixture_state[i] == MG.F_NONE)):
 				fix_bad += 1
 		check(fix_bad == 0, "valid fixture %d" % s)
+		var acc: Array = count_accents(m)
+		check(acc[1] >= acc[0] * 8 / 100 and acc[1] <= acc[0] * 16 / 100, "wallpaper accent ratio %d" % s)
+		check(acc[2] == 0, "district wall materials intact %d" % s)
 		var before := snapshot(m)
 		if regen_seeds.has(s):
 			reused.generate_with_validation(s)
@@ -105,6 +135,8 @@ func _init() -> void:
 		if regen_seeds.has(s):
 			m.generate_with_validation(s)
 			check(before == snapshot(m), "same-instance regeneration %d" % s)
+			var acc2: Array = count_accents(m)
+			check(acc2 == acc, "accent determinism %d" % s)
 		grids[m.grid] = true
 		pillars[str(m.pillar_cells)] = true
 		props[str(m.prop_clusters)] = true

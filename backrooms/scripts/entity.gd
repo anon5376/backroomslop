@@ -165,6 +165,12 @@ func _search_points() -> int:
 	return 3 + _level()
 
 
+func _aggression() -> float:
+	"""Per-run temperament 0.9-1.1 from the seed. Pure: no RNG consumed."""
+	var s: int = maze.seed_used if maze != null else 0
+	return 0.9 + 0.2 * float(abs(s * 31 + 7) % 100) / 100.0
+
+
 func _stalk_trigger(prey: Node3D) -> float:
 	var base: float = 5.0 if prey.get("crouched") == true else 10.0
 	return base + float(_level())
@@ -183,7 +189,7 @@ func hear_noise(pos: Vector3, radius: float) -> void:
 			_start_search()  # recenter the sweep on the fresh sound
 		return
 	# Closer = more suspicious. Two close noises (or one very close) => HUNT.
-	_suspicion += clampf(1.2 - d / radius, 0.15, 1.0) * (1.0 + 0.25 * float(_level()))
+	_suspicion += clampf(1.2 - d / radius, 0.15, 1.0) * (1.0 + 0.25 * float(_level())) * _aggression()
 	if _suspicion >= 1.0:
 		_start_hunt()
 	elif state == State.STALK and d < radius * 0.6:

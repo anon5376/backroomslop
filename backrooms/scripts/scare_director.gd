@@ -53,8 +53,26 @@ func _process(delta: float) -> void:
 		_fire()
 
 
+func _pick_variant() -> int:
+	return randi_range(0, 2)
+
+
 func _fire() -> void:
 	_running = true
+	match _pick_variant():
+		0:
+			await _scare_row_blackout()
+		1:
+			await _scare_surge()
+		_:
+			await _scare_strobe()
+	lights.clear_blackouts()
+	for m: ShaderMaterial in panel_materials:
+		m.set_shader_parameter("global_dim", 1.0)
+	_running = false
+
+
+func _scare_row_blackout() -> void:
 	var pc: Vector2i = maze.world_to_cell(player.global_position)
 	# Pick a row marching toward the player from a random direction.
 	var dirs: Array[Vector2i] = [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]
@@ -75,10 +93,32 @@ func _fire() -> void:
 		if ui != null and ui.has_method("static_burst"):
 			ui.static_burst(0.6)
 		await get_tree().create_timer(0.45, false).timeout
-	lights.clear_blackouts()
+
+
+func _scare_surge() -> void:
+	"""Every panel flares hot-white for half a second, then snaps back."""
+	if not _still_ok():
+		return
 	for m: ShaderMaterial in panel_materials:
-		m.set_shader_parameter("global_dim", 1.0)
-	_running = false
+		m.set_shader_parameter("global_dim", 1.7)
+	_swell.play()
+	if ui != null and ui.has_method("static_burst"):
+		ui.static_burst(0.3)
+	await get_tree().create_timer(0.5, false).timeout
+
+
+func _scare_strobe() -> void:
+	"""Three hard full-room blinks. No silhouette: the scare is the dark."""
+	for k: int in 3:
+		if not _still_ok():
+			break
+		for m: ShaderMaterial in panel_materials:
+			m.set_shader_parameter("global_dim", 0.1)
+		await get_tree().create_timer(0.12, false).timeout
+		for m: ShaderMaterial in panel_materials:
+			m.set_shader_parameter("global_dim", 1.0)
+		await get_tree().create_timer(0.18, false).timeout
+	_swell.play()
 
 
 func _still_ok() -> bool:

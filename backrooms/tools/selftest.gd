@@ -168,8 +168,8 @@ func _build() -> void:
 	_check(info["stairs_area"] != null and info["exit_area"] == null, "L0 build produces stairs, no exit")
 	var waters: int = int(info["pickup_water"])
 	var breads: int = int(info["pickup_bread"])
-	_check(waters == 42, "42 water pickups (%d)" % waters)
-	_check(breads == 36, "36 bread pickups (%d)" % breads)
+	_check(waters >= 34 and waters <= 50, "seed-varied water pickups (%d)" % waters)
+	_check(breads >= 28 and breads <= 44, "seed-varied bread pickups (%d)" % breads)
 	_check(root.find_children("Cones*", "", true, false).is_empty(), "no light-shaft cones")
 	_check(root.get_node_or_null("Baseboards") != null, "baseboards built")
 	_check(root.get_node_or_null("PanelsFlicker") != null, "flicker panels built")
@@ -182,6 +182,7 @@ func _build() -> void:
 func _mp_netids() -> void:
 	# Both peers must build identical pickup net_id -> position maps.
 	var ids: Dictionary = {}
+	var totals: Array[int] = []
 	for attempt: int in 2:
 		var m = MG.new()
 		var used: int = m.generate_with_validation(555)
@@ -192,6 +193,7 @@ func _mp_netids() -> void:
 		m.build_world(root, mats)
 		var am = AM.new()
 		var info: Dictionary = m.build_dressing(root, mats, am)
+		totals.append(int(info["pickup_water"]) + int(info["pickup_bread"]))
 		for p in info["pickups"]:
 			var pk: Pickup = p as Pickup
 			var pos: Vector3 = (pk as Node3D).position
@@ -200,7 +202,8 @@ func _mp_netids() -> void:
 			else:
 				ids[pk.net_id] = pos
 		root.free()
-	_check(ids.size() == 78, "78 pickups carry net ids (%d)" % ids.size())
+	_check(totals[0] == totals[1], "seed-varied counts deterministic (%d)" % totals[0])
+	_check(ids.size() >= 62 and ids.size() <= 94, "pickups carry net ids (%d)" % ids.size())
 
 
 func _net_flags() -> void:
